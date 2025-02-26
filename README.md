@@ -3,6 +3,10 @@ Project: Capstone Project 1
 
 # Author: Vijay Chaganti
 
+*Data Source: [https://github.com/chagantvj/PracticalApplicationM17/blob/main/bank-additional-full.csv](https://github.com/chagantvj/CapstoneProject1/blob/main/US_Housing_Data.csv)*
+
+*Python Code: https://github.com/chagantvj/CapstoneProject1/blob/main/VijayChaganti-CapStoneProjecct1.ipynb*
+
 Dataset information
 ---
 *This dataset is very rich in number of columns that will help implementing several different encouding techniques for catorigical data
@@ -10,11 +14,14 @@ Dataset information
 
 *The provided dataset about US Housing Scales
 
-*Given dataset has 1500 entries with 80 columns*
+*Given dataset has 1460 entries with 80 columns*
 
-*Data Source: [https://github.com/chagantvj/PracticalApplicationM17/blob/main/bank-additional-full.csv](https://github.com/chagantvj/CapstoneProject1/blob/main/US_Housing_Data.csv)*
+<img width="1111" alt="Screenshot 2025-02-25 at 8 59 49 PM" src="https://github.com/user-attachments/assets/12b1baaa-91aa-4fc2-bf1c-759c9eba177d" />
 
-*Python Code: https://github.com/chagantvj/CapstoneProject1/blob/main/VijayChaganti-CapStoneProjecct1.ipynb*
+
+
+
+
 
 **Date Understanding and Cleaning**
 
@@ -106,6 +113,20 @@ Data columns (total 81 columns):
  80  SalePrice      1460 non-null   int64  
 dtypes: float64(3), int64(35), object(43)
 ```
+
+```
+numerical_columns = df.select_dtypes(['int64', 'float64']).columns
+print(f"Total numerical features in dataset is: {len(numerical_columns)}")
+   >>> Total numerical column in dataset is: 38
+
+categorical_columns = df.select_dtypes(['object']).columns
+print(f"Total categorical features in dataset is: {len(categorical_columns)}")
+   >>> Total categorical features in dataset is: 43
+```
+
+<img width="1108" alt="Screenshot 2025-02-25 at 9 16 21 PM" src="https://github.com/user-attachments/assets/5042a981-4647-4069-bbb2-117bb6084598" />
+
+
 
 *Removing Columns with Missing data and also some of the coulumns that are having many unique values that does play an important role in price*
 ---
