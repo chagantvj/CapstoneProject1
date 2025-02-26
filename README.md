@@ -126,7 +126,22 @@ print(f"Total categorical features in dataset is: {len(categorical_columns)}")
 
 <img width="1108" alt="Screenshot 2025-02-25 at 9 16 21 PM" src="https://github.com/user-attachments/assets/5042a981-4647-4069-bbb2-117bb6084598" />
 
+```
+emptyCount_PerFeature = df.isna().sum()
+emptyCountPercent_PerFeature = (emptyCount_PerFeature / len(df)) * 100
+nonZero_emptyCountPercent_PerFeature = emptyCountPercent_PerFeature[emptyCountPercent_PerFeature > 0]
+rounded_Percent = np.round(nonZero_emptyCountPercent_PerFeature)
+print(rounded_Percent)
+```
+<img width="1108" alt="Screenshot 2025-02-25 at 10 36 58 PM" src="https://github.com/user-attachments/assets/55c29b8d-18f7-4fb0-a20d-e762b7f41cf4" />
 
+
+```
+features_to_drop = emptyCountPercent_PerFeature[emptyCountPercent_PerFeature > 59].index
+ddf = df.drop(columns=features_to_drop)
+ddf.shape
+    >>> (1460, 76)
+```
 
 *Removing Columns with Missing data and also some of the coulumns that are having many unique values that does play an important role in price*
 ---
