@@ -5,7 +5,7 @@ Project: Capstone Project 1
 
 *Data Source: [https://github.com/chagantvj/PracticalApplicationM17/blob/main/bank-additional-full.csv](https://github.com/chagantvj/CapstoneProject1/blob/main/US_Housing_Data.csv)*
 
-*Python Code: https://github.com/chagantvj/CapstoneProject1/blob/main/VijayChaganti-CapStoneProjecct1.ipynb*
+*Python Code: https://github.com/chagantvj/CapstoneProject1/blob/main/VijayChaganti-CapStoneProjecct_2.ipynb*
 
 Dataset information
 ---
