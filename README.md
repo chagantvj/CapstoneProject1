@@ -1,27 +1,25 @@
-Project: Capstone Project 1
+Project: Capstone Project 2 (Final)
 ===
 
 # Author: Vijay Chaganti
 
 *Data Source: [https://github.com/chagantvj/PracticalApplicationM17/blob/main/bank-additional-full.csv](https://github.com/chagantvj/CapstoneProject1/blob/main/US_Housing_Data.csv)*
 
-*Python Code: https://github.com/chagantvj/CapstoneProject1/blob/main/VijayChaganti-CapStoneProjecct_2.ipynb*
+*Python Code: https://github.com/chagantvj/CapstoneProject1/blob/main/VijayChaganti-CapStoneProjecct_Final.ipynb*
+
+# Project overview and goals
+The goal of this project is to identify more effective ways for predicting housing price based on given dataset. We will be training and tuning different set of classification & regression models to accurately predict the price. We will then evaluate and compare the models' performances to identify the best one, then further scrutinize it to find the most effective features that enhance performance.
 
 Dataset information
 ---
-*This dataset is very rich in number of columns that will help implementing several different encouding techniques for catorigical data
-*In combination with numerical and categorical data, its possible to generete good pipeline models to predict House Scale Price
+*This dataset is very rich in number of columns that will help implementing several different encouding techniques for catorigical data*
+*In combination with numerical and categorical data, its possible to generete good pipeline models to predict House Scale Price*
 
 *The provided dataset about US Housing Scales
 
 *Given dataset has 1460 entries with 80 columns*
 
-<img width="1111" alt="Screenshot 2025-02-25 at 8 59 49 PM" src="https://github.com/user-attachments/assets/12b1baaa-91aa-4fc2-bf1c-759c9eba177d" />
-
-
-
-
-
+<img width="1100" alt="Screenshot 2025-02-25 at 8 59 49 PM" src="https://github.com/user-attachments/assets/12b1baaa-91aa-4fc2-bf1c-759c9eba177d" />
 
 **Date Understanding and Cleaning**
 
@@ -166,7 +164,7 @@ Unique values in column SaleCondition: ['Normal' 'Abnorml' 'Partial' 'AdjLand' '
 ```
 **HeatMap of given dataset**
 ---
-<img width="678" alt="Screenshot 2025-02-23 at 10 32 41 PM" src="https://github.com/user-attachments/assets/bba46657-0144-4f49-a9e3-5309827a715d" />
+<img width="1110" alt="Screenshot 2025-03-15 at 7 43 23 PM" src="https://github.com/user-attachments/assets/f8469b4c-0e0d-4085-816b-ab4b77f7fb89" />
 
 **Applying Ordinal encoding techniques for some of the Caterogical data columns**
 ---
@@ -195,14 +193,97 @@ rdf['LotConfig'] = rdf['LotConfig'].map(Utilities_map)
 
 **HeatMap of given dataset with categorical columns**
 ---
-<img width="566" alt="Screenshot 2025-02-23 at 10 36 01 PM" src="https://github.com/user-attachments/assets/59ddfee5-c89f-43e1-8edd-b51b10b5eb2e" />
+<img width="1110" alt="Screenshot 2025-03-15 at 7 47 22 PM" src="https://github.com/user-attachments/assets/efa9032d-4ba0-4348-a225-e23927c750af" />
 
 **Histplot of given dataset with Numerical columns**
 ---
-<img width="973" alt="Screenshot 2025-02-23 at 10 39 44 PM" src="https://github.com/user-attachments/assets/c4faa2e7-03ee-4c4f-b3d5-39f974fe1c93" />
 
-**Conclusion**
+```
+import math
+sns.set_style('darkgrid')
+numerical_columns_ccdf = df.select_dtypes(['int64', 'float64']).columns
+np.seterr(divide='ignore', invalid='ignore')
+total_plots = len(numerical_columns_ccdf)
+rows = math.ceil(total_plots / 4)
+cols = 4
+
+plt.figure(figsize=(20,20))
+for index, feature in enumerate(numerical_columns_ccdf):
+    plt.subplot(rows, cols, index + 1)
+    feature_data = np.where(df[feature] == 0, np.log(df[feature] + 0.5), np.log(df[feature]))
+    # Plotting the histogram with KDE
+    sns.histplot(feature_data, kde=True, color='g')
+    plt.xlabel(feature)
+    plt.ylabel('distribution')
+    plt.title(f"{feature} distribution")
+
+plt.tight_layout()
+```
+<img width="1110" alt="Screenshot 2025-03-15 at 7 49 29 PM" src="https://github.com/user-attachments/assets/57d6cf5b-00ee-4475-b7a7-e4499c873dfa" />
+
+**Eliminating Outliers using IRQ**
 ---
-Project still in progress ...
+It was observed that if we use IRQ to emilinate outliers, we are almost loosing 95% of the given data and hence used all the given data for modelling.
+```
+irq = df['SalePrice'].quantile(.75) - df['SalePrice'].quantile(.25)
+lower_bound = df['SalePrice'].quantile(.25) - 1.5 * irq
+upper_bound = df['SalePrice'].quantile(.75) + 1.5 * irq
+df_irq = df[(df['SalePrice'] > lower_bound) & (df['SalePrice'] > upper_bound)].copy()
+irq_data_lost = 1 - (df_irq.shape[0]/df.shape[0])
+print("We lost {:.2%} of the data by the IRQ method" .format(irq_data_lost))
+    >>> We lost 95.82% of the data by the IRQ method
+```
+**Scatter Plot of Sale Data**
+---
+<img width="1110" alt="Screenshot 2025-03-15 at 8 12 46 PM" src="https://github.com/user-attachments/assets/fda8c31d-9a82-48be-ba1e-992f145a8834" />
+
+**Boxplot of Scale Price Log vs Building Type**
+---
+<img width="1110" alt="Screenshot 2025-03-15 at 8 15 12 PM" src="https://github.com/user-attachments/assets/493f4c3f-c49f-4d2b-98c2-d21dc7d92f31" />
+
+**Violin Plot of Sale Price Log vs Exterior Condition**
+---
+<img width="1110" alt="Screenshot 2025-03-15 at 8 17 22 PM" src="https://github.com/user-attachments/assets/f43bbfed-470f-4ddf-9229-f8cfd58afad7" />
+
+
+**Model Comparisons:**
+---
+<img width="1110" alt="Screenshot 2025-03-15 at 8 43 44 PM" src="https://github.com/user-attachments/assets/36ce8946-a630-49cd-a9a3-a66c2279bf9f" />
+
+*Best performance on Test Data: The Decision Tree (DT) and Random Forest (RF) models perform best in terms of both low errors (MAE and MSE) and high R² values
+
+*Best R² Score on Test: Decision Tree (DT) and Random Forest (RF)
+
+*Most Time-Efficient: K-Nearest Neighbors (KNN), but its performance is not as strong as others
+
+*Worst performance: Support Vector Machine (SVM) is performing poorly across all metrics
+
+*It seems DT, RF, and XGB are the most reliable models for this dataset, with DT being particularly strong at both fitting and generalization, albeit with longer training times for RF and XGB
+
+
+<img width="1110" alt="Screenshot 2025-03-15 at 8 49 22 PM" src="https://github.com/user-attachments/assets/c55f87c8-4d2f-477b-9e85-c12a3c977fda" />
+
+
+**Summary of Insights**
+---
+*Best Test Accuracy: Decision Tree (DT), with an accuracy of 38.63%, but it is likely overfitting due to the perfect training accuracy
+
+*Best Train Accuracy: Decision Tree (DT) (100%) performs excellently on training data, but that may not be useful in practice if it overfits
+
+*Most Time-Efficient: K-Nearest Neighbors (KNN), with a very low runtime of just 0.0042 seconds, although the performance is poor
+
+*Worst Test Accuracy: Logistic Regression (LogR) and Support Vector Machine (SVM) both perform poorly on the test set, with very low accuracy (around 0.0027 to 0.0164)
+
+*Slowest Model: Logistic Regression (LogR) takes the longest time to train, with over 184 seconds, despite its relatively high accuracy on the training data
+
+
+**Recommendation**
+---
+*Decision Tree (DT) stands out as the best among the models, despite the overfitting.
+
+*KNN is very fast but not effective for this dataset.
+
+*Logistic Regression (LogR) and SVM should likely be reconsidered, as they both show poor test accuracy and relatively slow performance for this problem.
+
 
 
